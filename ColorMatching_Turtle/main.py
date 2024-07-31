@@ -21,7 +21,7 @@ BLACK = (0, 0, 0)
 COLORS = [(198, 138, 138), (150, 84, 84), (198, 149, 117), (188, 165, 117), (217, 209, 156), (150, 185, 153), (128, 137, 122), (155, 174, 218), (108, 126, 166), (127, 115, 132), (201, 192, 211)]
 #          dark pink,       red,           orange,          orange yellow,   yellow,          light green,     dark green,      light blue,      dark blue,       purple,          light purple 
 
-# display the colors 
+# display score board  
 def update_screen(block_size): 
     global turtle_left
     col_pos = 490 
@@ -49,6 +49,47 @@ def update_screen(block_size):
 
     pygame.display.flip() 
 
+# display available colors to make color wish 
+def display_color_for_wish(block_size): 
+    global color_wish 
+    col_pos = 95 
+
+    font_l = pygame.font.SysFont('sfnsmono', 20) 
+    text_wish_dis = font_l.render("Make a color wish!", True, WHITE)
+    text_rect_wish_dis = text_wish_dis.get_rect() 
+    text_rect_wish_dis.center = (400, 300)
+    screen.blit(text_wish_dis, text_rect_wish_dis)
+
+    font_s = pygame.font.SysFont('sfnsmono', 16) 
+    text_wish = font_s.render("Color Wished: ", True, WHITE)
+    text_rect_wish = text_wish.get_rect() 
+    text_rect_wish.center = (200, 160)
+    screen.blit(text_wish, text_rect_wish)
+    pygame.draw.rect(screen, color_wish, (275, 140, block_size, block_size))
+
+    for i, color in enumerate(COLORS): 
+        if i < 5:
+            pygame.draw.rect(screen, color, (col_pos + block_size + block_size/2 + i*block_size, block_size + col_pos*3, block_size, block_size))
+        else: 
+            pygame.draw.rect(screen, color, (col_pos + block_size + (i-5)*block_size, block_size*2 + col_pos*3, block_size, block_size))
+
+    pygame.display.flip() 
+
+def handle_color_wish(x, y, block_size): 
+    global color_wish 
+
+    col_pos = 95 
+    index = -99 
+    if block_size + col_pos*3 <= y <= block_size*2 + col_pos*3: 
+        index = (x - col_pos - block_size - block_size/2) // block_size 
+        index = int(index) if 0.0 <= index <= 4.0 else -99
+    elif block_size*2 + col_pos*3 <= y <= block_size*3 + col_pos*3: 
+        index = 3 + (x - col_pos + block_size) // block_size
+        index = int(index) if 5.0 <= index <= 10.0 else -99
+
+    color_wish = COLORS[index]
+    
+
 # button to add turtle 
 def button_turtle(): 
     global turtle_left
@@ -73,7 +114,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('TURTLE Color Matching')
 board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
 add_tur = Button(600, 100, 100, 50, WHITE, GRAY, 'add turtle', BLACK, button_turtle)
-start_game = Button(350, 280, 100, 40, WHITE, GRAY, "START", BLACK, start_game)
+start_game = Button(550, 150, 100, 40, WHITE, GRAY, "START", BLACK, start_game)
 
 def board_full(board): 
     for row in range(ROWS):
@@ -204,7 +245,8 @@ def game_scene():
         check_board(board, block_size, check_interval)  
 
 def menu_scene(): 
-    start_game.draw(screen)
+    start_game.draw(screen) 
+    display_color_for_wish(75)
     pygame.display.flip() 
 
 if __name__ == "__main__": 
@@ -212,6 +254,7 @@ if __name__ == "__main__":
     block_size = 25 
     check_interval = 500  # ms
     scene_manager = "MENU" 
+    color_wish = BLACK
 
     screen.fill(BLACK)
 
@@ -221,12 +264,12 @@ if __name__ == "__main__":
                 running = False 
             if event.type == pygame.MOUSEBUTTONUP: 
                 x, y = event.pos 
+                handle_color_wish(x, y, 75)
             add_tur.check_click(event)
             start_game.check_click(event)
         
         if scene_manager == "GAME": 
             game_scene() 
-            pygame.display.flip() 
         elif scene_manager == "LOSE": 
             pass 
         elif scene_manager == "WIN": 
