@@ -11,6 +11,8 @@ ROWS, COLS = 3, 3
 SQUARE_SIZE = WIDTH // (COLS+2) 
 turtle_left = 15 
 score = 0 
+scene_manager = None 
+color_wish = None 
 
 # colors 
 WHITE = (255, 255, 255)
@@ -62,11 +64,16 @@ def button_turtle():
         if action_done:
             break
 
+def start_game(): 
+    global scene_manager
+    scene_manager = "GAME"
+
 # create screen and initialization 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('TURTLE Color Matching')
 board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
-button = Button(600, 100, 100, 50, WHITE, GRAY, 'add turtle', BLACK, button_turtle)
+add_tur = Button(600, 100, 100, 50, WHITE, GRAY, 'add turtle', BLACK, button_turtle)
+start_game = Button(350, 280, 100, 40, WHITE, GRAY, "START", BLACK, start_game)
 
 def board_full(board): 
     for row in range(ROWS):
@@ -188,10 +195,23 @@ def check_board(board, block_size, check_interval):
         turtle_left += 5 
         update_screen(block_size)
 
+def game_scene(): 
+    add_tur.draw(screen)
+    update_board(block_size) 
+    update_screen(block_size)
+    if board_full(board): 
+        wait(check_interval)
+        check_board(board, block_size, check_interval)  
+
+def menu_scene(): 
+    start_game.draw(screen)
+    pygame.display.flip() 
+
 if __name__ == "__main__": 
     running = True 
     block_size = 25 
     check_interval = 500  # ms
+    scene_manager = "MENU" 
 
     screen.fill(BLACK)
 
@@ -201,13 +221,19 @@ if __name__ == "__main__":
                 running = False 
             if event.type == pygame.MOUSEBUTTONUP: 
                 x, y = event.pos 
-            button.check_click(event)
+            add_tur.check_click(event)
+            start_game.check_click(event)
         
-        button.draw(screen)
-        update_board(block_size) 
-        update_screen(block_size)
-        if board_full(board): 
-            wait(check_interval)
-            check_board(board, block_size, check_interval) 
+        if scene_manager == "GAME": 
+            game_scene() 
+            pygame.display.flip() 
+        elif scene_manager == "LOSE": 
+            pass 
+        elif scene_manager == "WIN": 
+            pass 
+        else: 
+            if scene_manager != "MENU": 
+                print("INVALID SCENE") 
+            menu_scene() 
 
     pygame.quit() 
