@@ -125,19 +125,14 @@ def check_empty(board, score):
 def check_board(board, score, block_size, check_interval): 
     triples, pairs = check_duplicates(board, score)
     merge_list = triples + pairs 
-    last_check_time = pygame.time.get_ticks()
 
     while merge_list: 
-        current_time = pygame.time.get_ticks() 
-
-        if current_time - last_check_time >= check_interval:
-            print(merge_list[0])
-            for r, c in merge_list[0]: 
-                board[r][c] = None
-            update_board(block_size)
-            wait(check_interval)
-            merge_list = merge_list[1:]
-            last_check_time = current_time  # Reset the last check time
+        print(merge_list[0])
+        for r, c in merge_list[0]: 
+            board[r][c] = None
+        update_board(block_size)
+        wait(check_interval)
+        merge_list = merge_list[1:]
 
     check_empty(board, score) 
 
