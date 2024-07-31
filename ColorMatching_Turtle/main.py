@@ -52,31 +52,45 @@ def update_board(block_size):
         pygame.draw.line(screen, BLACK, (col * SQUARE_SIZE + block_size, block_size), (col * SQUARE_SIZE + block_size, 3 * SQUARE_SIZE + block_size))
     for row in range(ROWS + 1):
         pygame.draw.line(screen, BLACK, (block_size, row * SQUARE_SIZE + block_size), (3 * SQUARE_SIZE + block_size, row * SQUARE_SIZE + block_size))
-
-def check_triples(board, score): 
-    triples = [] 
-    if board[0][0] == board[1][1] == board[2][2]: 
-        score += 3 
-        triples.append(((0, 0), (1, 1), (2, 2)))
-    if board[0][2] == board[1][1] == board[2][0]: 
-        score += 3 
-        triples.append(((0, 2), (1, 1), (2, 0)))
-    for i in range(ROWS): 
-        if board[i][0] == board[i][1] == board[i][2]: 
-            score += 3 
-            triples.append(((i, 0), (i, 1), (i, 2)))
-        if board[0][i] == board[1][i] == board[2][i]: 
-            score += 3  
-            triples.append(((0, i), (1, i), (2, i)))
-    return triples 
-
+    pygame.display.flip() 
+    
 def contains_pair(pairs, target_pair):
     reversed_pair = (target_pair[1], target_pair[0])
     return target_pair in pairs or reversed_pair in pairs
 
-def check_pairs(board, score): 
+def check_duplicates(board, score): 
+    triples = [] 
     pairs = []
     included_coords = set()
+
+    # triples 
+    if board[0][0] == board[1][1] == board[2][2]: 
+        score += 3 
+        included_coords.add((0, 0))
+        included_coords.add((1, 1))
+        included_coords.add((2, 2))
+        triples.append(((0, 0), (1, 1), (2, 2)))
+    if board[0][2] == board[1][1] == board[2][0]: 
+        score += 3 
+        included_coords.add((0, 2))
+        included_coords.add((1, 1))
+        included_coords.add((2, 0))
+        triples.append(((0, 2), (1, 1), (2, 0)))
+    for i in range(ROWS): 
+        if board[i][0] == board[i][1] == board[i][2]: 
+            score += 3 
+            included_coords.add((i, 0))
+            included_coords.add((i, 1))
+            included_coords.add((i, 2))
+            triples.append(((i, 0), (i, 1), (i, 2)))
+        if board[0][i] == board[1][i] == board[2][i]: 
+            score += 3  
+            included_coords.add((0, i))
+            included_coords.add((1, i))
+            included_coords.add((2, i))
+            triples.append(((0, i), (1, i), (2, i)))
+    
+    # pairs 
     for row in range(ROWS): 
         for col in range(COLS): 
             color = board[row][col] 
@@ -90,8 +104,16 @@ def check_pairs(board, score):
                                     pairs.append(new_pair)
                                     included_coords.add((row, col))
                                     included_coords.add((row_match, col_match))
-    return pairs
+    return triples, pairs
 
+def wait(wait_ms):
+    start_time = pygame.time.get_ticks()
+    while pygame.time.get_ticks() - start_time < wait_ms:
+        # handle events to keep the application responsive
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
 
 def check_empty(board, score): 
     for row in range(ROWS):
@@ -100,11 +122,23 @@ def check_empty(board, score):
                 return False 
     return True  
 
-def check_board(board, score): 
-    triples = check_triples(board, score)
-    pairs = check_pairs(board, score) 
+def check_board(board, score, block_size, check_interval): 
+    triples, pairs = check_duplicates(board, score)
     merge_list = triples + pairs 
-    print(merge_list)
+    last_check_time = pygame.time.get_ticks()
+
+    while merge_list: 
+        current_time = pygame.time.get_ticks() 
+
+        if current_time - last_check_time >= check_interval:
+            print(merge_list[0])
+            for r, c in merge_list[0]: 
+                board[r][c] = None
+            update_board(block_size)
+            wait(check_interval)
+            merge_list = merge_list[1:]
+            last_check_time = current_time  # Reset the last check time
+
     check_empty(board, score) 
 
     # 考虑优先级，积分可调 
@@ -122,11 +156,9 @@ if __name__ == "__main__":
     block_size = 25 
     num_turtle = 15 
     score = 0 
-    check_interval = 2000  # ms
-    # last_check_time = pygame.time.get_ticks()
+    check_interval = 500  # ms
 
     while running: 
-        # current_time = pygame.time.get_ticks()
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
                 running = False 
@@ -134,15 +166,11 @@ if __name__ == "__main__":
                 x, y = event.pos 
                 # score = score - 1 
             button.check_click(event)
-
-        # if current_time - last_check_time >= check_interval:
-        #     pairs = check_matching_pairs()
-        #     last_check_time = current_time  # Reset the last check time
-
         
         button.draw(screen)
-        update_board(block_size)
-        check_board(board, score) if board_full(board) else None 
-        pygame.display.flip() 
+        update_board(block_size) 
+        if board_full(board): 
+            wait(check_interval)
+            check_board(board, score, block_size, check_interval) 
 
     pygame.quit() 
