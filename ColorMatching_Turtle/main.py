@@ -44,6 +44,12 @@ def update_screen(block_size):
     screen.blit(text_tur, text_rect_tur)
     screen.blit(text_sco, text_rect_sco)
 
+    text_wis = font_s.render("Color Wished: ", True, WHITE)
+    text_rect_wis = text_wis.get_rect() 
+    text_rect_wis.center = (600, 550)
+    screen.blit(text_wis, text_rect_wis)
+    pygame.draw.rect(screen, color_wish, (660, 525, 50, 50))
+
     for i, color in enumerate(COLORS): 
         pygame.draw.rect(screen, color, (col_pos + block_size + i*block_size, block_size, block_size, block_size))
 
@@ -80,19 +86,24 @@ def handle_color_wish(x, y, block_size):
 
     col_pos = 95 
     index = -99 
+    final_index = 0 
     if block_size + col_pos*3 <= y <= block_size*2 + col_pos*3: 
         index = (x - col_pos - block_size - block_size/2) // block_size 
         index = int(index) if 0.0 <= index <= 4.0 else -99
+        if 0 <= index <= 4: 
+            final_index = index 
     elif block_size*2 + col_pos*3 <= y <= block_size*3 + col_pos*3: 
         index = 3 + (x - col_pos + block_size) // block_size
         index = int(index) if 5.0 <= index <= 10.0 else -99
-
-    color_wish = COLORS[index]
+        if 5 <= index <= 10: 
+            final_index = index 
+    color_wish = COLORS[final_index]
     
 
 # button to add turtle 
 def button_turtle(): 
-    global turtle_left
+    # TODO: if color_wish make "ding~" 
+    global turtle_left, score 
     color = random.choice(COLORS) 
     action_done = False
     for row in range(ROWS):
@@ -100,21 +111,25 @@ def button_turtle():
             if board[row][col] is None:
                 board[row][col] = color
                 turtle_left -= 1
+                if color == color_wish: 
+                    score += 1 
+                    turtle_left += 1
                 action_done = True
                 break
         if action_done:
             break
 
-def start_game(): 
+def button_start(): 
     global scene_manager
     scene_manager = "GAME"
+    screen.fill(BLACK)
 
 # create screen and initialization 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption('TURTLE Color Matching')
 board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
 add_tur = Button(600, 100, 100, 50, WHITE, GRAY, 'add turtle', BLACK, button_turtle)
-start_game = Button(550, 150, 100, 40, WHITE, GRAY, "START", BLACK, start_game)
+start_game = Button(550, 150, 100, 40, WHITE, GRAY, "START", BLACK, button_start)
 
 def board_full(board): 
     for row in range(ROWS):
@@ -264,7 +279,8 @@ if __name__ == "__main__":
                 running = False 
             if event.type == pygame.MOUSEBUTTONUP: 
                 x, y = event.pos 
-                handle_color_wish(x, y, 75)
+                if scene_manager == "MENU": 
+                    handle_color_wish(x, y, 75)
             add_tur.check_click(event)
             start_game.check_click(event)
         
