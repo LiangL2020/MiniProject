@@ -86,19 +86,16 @@ def handle_color_wish(x, y, block_size):
 
     col_pos = 95 
     index = -99 
-    final_index = 0 
     if block_size + col_pos*3 <= y <= block_size*2 + col_pos*3: 
         index = (x - col_pos - block_size - block_size/2) // block_size 
         index = int(index) if 0.0 <= index <= 4.0 else -99
         if 0 <= index <= 4: 
-            final_index = index 
+            color_wish = COLORS[index]
     elif block_size*2 + col_pos*3 <= y <= block_size*3 + col_pos*3: 
         index = 3 + (x - col_pos + block_size) // block_size
         index = int(index) if 5.0 <= index <= 10.0 else -99
         if 5 <= index <= 10: 
-            final_index = index 
-    color_wish = COLORS[final_index]
-    
+            color_wish = COLORS[index]
 
 # button to add turtle 
 def button_turtle(): 
