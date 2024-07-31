@@ -14,7 +14,23 @@ SQUARE_SIZE = WIDTH // (COLS+2)
 WHITE = (255, 255, 255)
 GRAY = (158, 158, 158)
 BLACK = (0, 0, 0)
-COLORS = [(234, 208, 209), (150, 84, 84), (216, 202, 175), (123, 139, 111), (134, 150, 167), (201, 192, 211), (101, 101, 101)]
+#            pink,            red,           orange,        yellow,          green,        turqoise,      blue,           purple 
+COLORS_B = [(255, 153, 204), (153, 51, 51), (255, 153, 0), (255, 255, 128), (51, 102, 0), (0, 153, 153), (51, 102, 153), (204, 102, 255)]
+#            dark pink,       red,           orange,          orange yellow,   yellow,          light green,     dark green,      light blue,      dark blue,       purple,          light purple 
+COLORS = [(198, 138, 138), (150, 84, 84), (198, 149, 117), (188, 165, 117), (217, 209, 156), (150, 185, 153), (128, 137, 122), (155, 174, 218), (108, 126, 166), (127, 115, 132), (201, 192, 211)]
+# display the colors 
+def display_board(block_size): 
+    col_pos = 490 
+
+    # TODO 
+    font = pygame.font.SysFont('sfnsmono', 5)
+    text = font.render("hello world", True, BLACK)
+    textRect = text.get_rect() 
+    textRect.center = (550,600)
+    screen.blit(text,textRect)
+
+    for i, color in enumerate(COLORS): 
+        pygame.draw.rect(screen, color, (col_pos + block_size + i*block_size, block_size, block_size, block_size))
 
 # button to add turtle 
 def button_turtle(): 
@@ -123,25 +139,33 @@ def check_empty(board, score):
     return True  
 
 def check_board(board, score, block_size, check_interval): 
-    triples, pairs = check_duplicates(board, score)
-    merge_list = triples + pairs 
-
-    while merge_list: 
-        print(merge_list[0])
-        for r, c in merge_list[0]: 
-            board[r][c] = None
-        update_board(block_size)
-        wait(check_interval)
-        merge_list = merge_list[1:]
-
-    check_empty(board, score) 
-
     # 考虑优先级，积分可调 
     # 1. 清空 +5 
     # 2. 三连 +3 
     # 3. 隐藏 +2 
     # 4. 许愿色 + 1 
     # 5. 对对碰 + 1  
+
+    triples, pairs = check_duplicates(board, score)
+
+    while triples: 
+        for r, c in triples[0]: 
+            board[r][c] = None
+        score += 3 
+        update_board(block_size)
+        wait(check_interval)
+        triples = triples[1:]
+
+    while pairs: 
+        for r, c in pairs[0]: 
+            board[r][c] = None
+        score += 1 
+        update_board(block_size)
+        wait(check_interval)
+        pairs = pairs[1:]
+
+    if check_empty(board, score): 
+        score += 5 
 
     # print('in check_board') 
     # board[0][0] = None 
@@ -152,6 +176,8 @@ if __name__ == "__main__":
     num_turtle = 15 
     score = 0 
     check_interval = 500  # ms
+
+    display_board(block_size)
 
     while running: 
         for event in pygame.event.get(): 
