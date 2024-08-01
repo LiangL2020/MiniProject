@@ -9,6 +9,7 @@ class Button:
         self.text = text 
         self.text_color = text_color 
         self.action = action 
+        self.valid = False 
 
     def draw(self, screen):
         mouse_pos = pygame.mouse.get_pos()
@@ -22,5 +23,5 @@ class Button:
 
     def check_click(self, event):
         if event.type == pygame.MOUSEBUTTONUP and self.rect.collidepoint(event.pos):
-            if self.action:
+            if self.action and self.valid:
                 self.action()

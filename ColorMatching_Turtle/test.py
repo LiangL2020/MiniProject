@@ -4,7 +4,7 @@ import random
 from button import Button
 
 # TODO: 
-#  1. make scenes different classes for organization 
+#  1. make scenes different classes for organization [CHECK]
 #  2. make color blocks turtles (or something else)
 
 # initialize pygame 

@@ -1,12 +1,5 @@
 import pygame 
 
-# def init():
-#     global color_wish, turtle_left, score 
-#     scene_manager = "MENU" 
-#     color_wish = BLACK 
-#     turtle_left = 15 
-#     score = 0 
-
 # constants and colors 
 WIDTH, HEIGHT = 800, 600 
 WHITE = (255, 255, 255)
@@ -17,7 +10,8 @@ COLORS = [(198, 138, 138), (150, 84, 84), (198, 149, 117), (188, 165, 117), (217
 
 check_interval = 500  # ms
 color_wish = BLACK
-scene_manager = "MENU" 
+# scene_manager = "MENU" 
+scene_manager = "END"
 
 # initialize pygame 
 pygame.init() 

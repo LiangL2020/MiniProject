@@ -9,14 +9,24 @@ SQUARE_SIZE = lib.WIDTH // (COLS+2)
 
 class Game: 
     def __init__(self, turtle_left): 
+        self.num_turtle = turtle_left
         self.turtle_left = turtle_left 
         self.score = 0 
         self.board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
         self.add_tur = Button(600, 100, 100, 50, lib.WHITE, lib.GRAY, 'add turtle', lib.BLACK, self.button_turtle)
 
+    def reset(): 
+        self.turtle_left = self.num_turtle
+        self.score = 0 
+        self.board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
+        
     # button to add turtle 
     def button_turtle(self): 
         # TODO: if color_wish make "ding~" 
+        if self.turtle_left == 0: 
+            lib.scene_manager = "END"
+            lib.screen.fill(lib.BLACK)
+            pass 
         color = random.choice(lib.COLORS) 
         action_done = False
         for row in range(ROWS):
