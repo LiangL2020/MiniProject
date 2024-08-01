@@ -3,7 +3,7 @@ import random
 from button import Button
 import lib 
 
-# Constants
+# constants
 WIDTH, HEIGHT = 800, 600
 ROWS, COLS = 3, 3
 SQUARE_SIZE = WIDTH // (COLS + 2)
@@ -11,11 +11,12 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 COLORS = [(198, 138, 138), (150, 84, 84), (198, 149, 117), (188, 165, 117), (217, 209, 156), (150, 185, 153), (128, 137, 122), (155, 174, 218), (108, 126, 166), (127, 115, 132), (201, 192, 211)]
 
-# Variables
-turtle_left = 15
-score = 0
-board = [[None for _ in range(COLS)] for _ in range(ROWS)]
-color_wish = BLACK
+class Game: 
+    def __init__(self, turtle_left, color_wish): 
+        self.turtle_left = turtle_left 
+        self.color_wish = color_wish 
+        self.score = 0 
+        self.board = [[None for _ in range(COLS)] for _ in range(ROWS)]
 
 def update_screen(screen, block_size):
     global turtle_left
