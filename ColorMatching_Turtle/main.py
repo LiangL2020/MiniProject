@@ -17,8 +17,11 @@ from scene_end import End
 #  3. hidden color (隐藏色) 
 #  4. if color_wish make "ding~" when adding turtle (button click) 
 #  5. end game if out of turtles [CHECK]
-#  6. start over button 
+#  6. start over button [CHECK]
 #  7. make button not valid when scene changed [CHECK]
+#  8. for full board no duplicates, free turtle to check for duplicates
+#  9. game restart, board should be cleared [CHECK]
+# 10. running out of turtles check duplicates again first... 
 
 if __name__ == "__main__": 
     running = True 
@@ -38,16 +41,25 @@ if __name__ == "__main__":
                     menu.handle_color_wish(x, y, 75)
             menu.start_game.check_click(event)
             game.add_tur.check_click(event)
+            game.back_menu.check_click(event)
+            game.star_over.check_click(event)
             end.but_back.check_click(event)
-        
+
         if lib.scene_manager == "GAME": 
+            if menu.reset: 
+                game.reset() 
+                menu.reset = False 
             menu.start_game.valid = False 
             game.add_tur.valid = True 
+            game.back_menu.valid = True
+            game.star_over.valid = True 
             end.but_back.valid = False 
             game.game_scene(lib.check_interval) 
         elif lib.scene_manager == "END": 
             menu.start_game.valid = False 
             game.add_tur.valid = False 
+            game.back_menu.valid = False
+            game.star_over.valid = False 
             end.but_back.valid = True 
             end.end_scene()
         else: 
@@ -55,6 +67,8 @@ if __name__ == "__main__":
                 print("INVALID SCENE") 
             menu.start_game.valid = True 
             game.add_tur.valid = False 
+            game.back_menu.valid = False
+            game.star_over.valid = False 
             end.but_back.valid = False 
             menu.menu_scene() 
 

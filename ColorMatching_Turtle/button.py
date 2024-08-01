@@ -1,11 +1,11 @@
 import pygame
 
 class Button:
-    def __init__(self, x, y, width, height, color, hover_color, text, text_color, action=None):
+    def __init__(self, x, y, width, height, color, hover_color, text_size, text, text_color, action=None):
         self.rect = pygame.Rect(x, y, width, height)
         self.color = color
         self.hover_color = hover_color
-        self.font = pygame.font.SysFont('sfnsmono', 15) 
+        self.font = pygame.font.SysFont('sfnsmono', text_size) 
         self.text = text 
         self.text_color = text_color 
         self.action = action 

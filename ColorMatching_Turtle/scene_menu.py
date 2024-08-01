@@ -4,9 +4,11 @@ from button import Button
 
 class Menu: 
     def __init__(self): 
-        self.start_game = Button(550, 150, 100, 40, lib.WHITE, lib.GRAY, "START", lib.BLACK, self.button_start)
+        self.start_game = Button(550, 150, 100, 40, lib.WHITE, lib.GRAY, 15, "START", lib.BLACK, self.button_start)
+        self.reset = False 
 
     def button_start(self): 
+        self.reset = True 
         lib.scene_manager = "GAME"
         lib.screen.fill(lib.BLACK)
 

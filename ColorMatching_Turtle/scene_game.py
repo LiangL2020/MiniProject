@@ -9,15 +9,17 @@ SQUARE_SIZE = lib.WIDTH // (COLS+2)
 
 class Game: 
     def __init__(self, turtle_left): 
+        lib.score = 0
         self.num_turtle = turtle_left
         self.turtle_left = turtle_left 
-        self.score = 0 
         self.board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
-        self.add_tur = Button(600, 100, 100, 50, lib.WHITE, lib.GRAY, 'add turtle', lib.BLACK, self.button_turtle)
+        self.add_tur = Button(600, 100, 100, 50, lib.WHITE, lib.GRAY, 15, 'add turtle', lib.BLACK, self.button_turtle)
+        self.back_menu = Button(35, 550, 50, 25, lib.WHITE, lib.GRAY, 8, "Back", lib.BLACK, self.back_menu) 
+        self.star_over = Button(100, 550, 50, 25, lib.WHITE, lib.GRAY, 8, "Restart", lib.BLACK, self.but_start) 
 
-    def reset(): 
+    def reset(self): 
+        lib.score = 0
         self.turtle_left = self.num_turtle
-        self.score = 0 
         self.board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
         
     # button to add turtle 
@@ -35,15 +37,25 @@ class Game:
                     self.board[row][col] = color
                     self.turtle_left -= 1
                     if color == lib.color_wish: 
-                        self.score += 1 
+                        lib.score += 1 
                         self.turtle_left += 1
                     action_done = True
                     break
             if action_done:
                 break
 
+    def back_menu(self): 
+        lib.scene_manager = "MENU"
+        lib.screen.fill(lib.BLACK)
+
+    def but_start(self): 
+        self.reset() 
+        lib.screen.fill(lib.BLACK)
+
     def game_scene(self, check_interval): 
         self.add_tur.draw(lib.screen)
+        self.back_menu.draw(lib.screen)
+        self.star_over.draw(lib.screen)
         self.update_board() 
         self.update_screen()
         if self.check_full(): 
@@ -125,7 +137,7 @@ class Game:
         while triples: 
             for r, c in triples[0]: 
                 self.board[r][c] = None
-            self.score += 3 
+            lib.score += 3 
             self.turtle_left += 3 
             self.update_board()
             self.update_screen()
@@ -135,7 +147,7 @@ class Game:
         while pairs: 
             for r, c in pairs[0]: 
                 self.board[r][c] = None
-            self.score += 1 
+            lib.score += 1 
             self.turtle_left += 1 
             self.update_board()
             self.update_screen()
@@ -143,7 +155,7 @@ class Game:
             pairs = pairs[1:]
 
         if self.check_empty(): 
-            self.score += 5 
+            lib.score += 5 
             self.turtle_left += 5 
             self.update_screen()
 
@@ -173,7 +185,7 @@ class Game:
         pygame.draw.rect(lib.screen, lib.BLACK, (580, 320, 160, 60))
         font_s = pygame.font.SysFont('sfnsmono', 15) 
         text_tur = font_s.render("Turtle Left: " + str(self.turtle_left), True, lib.WHITE)
-        text_sco = font_s.render("Score: " + str(self.score), True, lib.WHITE)
+        text_sco = font_s.render("Score: " + str(lib.score), True, lib.WHITE)
         text_rect_tur = text_tur.get_rect() 
         text_rect_sco = text_sco.get_rect() 
         text_rect_tur.center = (650, 335)
