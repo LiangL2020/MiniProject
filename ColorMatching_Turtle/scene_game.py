@@ -26,23 +26,28 @@ class Game:
     def button_turtle(self): 
         # TODO: if color_wish make "ding~" 
         if self.turtle_left == 0: 
-            lib.scene_manager = "END"
-            lib.screen.fill(lib.BLACK)
-            pass 
-        color = random.choice(lib.COLORS) 
-        action_done = False
-        for row in range(ROWS):
-            for col in range(COLS):
-                if self.board[row][col] is None:
-                    self.board[row][col] = color
-                    self.turtle_left -= 1
-                    if color == lib.color_wish: 
-                        lib.score += 1 
-                        self.turtle_left += 1
-                    action_done = True
+            triples, pairs = self.check_duplicates()
+            if triples == [] and pairs == []: 
+                lib.scene_manager = "END"
+                lib.screen.fill(lib.BLACK)
+            else: 
+                lib.wait(lib.check_interval)
+                self.check_board(lib.check_interval) 
+        else: 
+            color = random.choice(lib.COLORS) 
+            action_done = False
+            for row in range(ROWS):
+                for col in range(COLS):
+                    if self.board[row][col] is None:
+                        self.board[row][col] = color
+                        self.turtle_left -= 1
+                        if color == lib.color_wish: 
+                            lib.score += 1 
+                            self.turtle_left += 1
+                        action_done = True
+                        break
+                if action_done:
                     break
-            if action_done:
-                break
 
     def back_menu(self): 
         lib.scene_manager = "MENU"
@@ -141,7 +146,7 @@ class Game:
             self.turtle_left += 3 
             self.update_board()
             self.update_screen()
-            lib.wait(lib.check_interval)
+            lib.wait(check_interval)
             triples = triples[1:]
 
         while pairs: 
