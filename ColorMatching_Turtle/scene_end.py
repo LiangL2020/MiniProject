@@ -21,7 +21,7 @@ class End:
         text_rect_dis = text_dis.get_rect() 
         text_rect_dis.center = (400, 280)
         lib.screen.blit(text_dis, text_rect_dis)
-        text_sco = font_l.render("Your final score is: " + str(lib.score), True, lib.WHITE)
+        text_sco = font_l.render("You win " + str(lib.score) + " turtles!", True, lib.WHITE)
         text_rect_sco = text_sco.get_rect() 
         text_rect_sco.center = (400, 320)
         lib.screen.blit(text_sco, text_rect_sco)

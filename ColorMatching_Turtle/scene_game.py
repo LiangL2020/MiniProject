@@ -46,7 +46,7 @@ class Game:
                         self.board[row][col] = color
                         self.turtle_left -= 1
                         if color == lib.color_wish: 
-                            lib.score += 1 
+                            # lib.score += 1 
                             self.turtle_left += 1
                         action_done = True
                         break
@@ -169,7 +169,7 @@ class Game:
             pairs = pairs[1:]
 
         if self.check_empty(): 
-            lib.score += 5 
+            # lib.score += 5 
             self.turtle_left += 5 
             self.update_screen()
 
@@ -199,7 +199,7 @@ class Game:
         pygame.draw.rect(lib.screen, lib.BLACK, (580, 320, 160, 60))
         font_s = pygame.font.SysFont('sfnsmono', 15) 
         text_tur = font_s.render("Turtle Left: " + str(self.turtle_left), True, lib.WHITE)
-        text_sco = font_s.render("Score: " + str(lib.score), True, lib.WHITE)
+        text_sco = font_s.render("Turtles in Pot: " + str(lib.score), True, lib.WHITE)
         text_rect_tur = text_tur.get_rect() 
         text_rect_sco = text_sco.get_rect() 
         text_rect_tur.center = (650, 335)
