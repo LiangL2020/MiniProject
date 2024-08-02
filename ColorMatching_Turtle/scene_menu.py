@@ -38,7 +38,8 @@ class Menu:
             if i < 5:
                 pygame.draw.rect(lib.screen, color, (col_pos + block_size + block_size/2 + i*block_size, block_size + col_pos*3, block_size, block_size))
             else: 
-                pygame.draw.rect(lib.screen, color, (col_pos + block_size + (i-5)*block_size, block_size*2 + col_pos*3, block_size, block_size))
+                # pygame.draw.rect(lib.screen, color, (col_pos + block_size + (i-5)*block_size, block_size*2 + col_pos*3, block_size, block_size))
+                pygame.draw.rect(lib.screen, color, (col_pos + block_size + block_size/2 + (i-5)*block_size, block_size*2 + col_pos*3, block_size, block_size))
 
         pygame.display.flip() 
 
@@ -52,8 +53,14 @@ class Menu:
             if 0 <= index <= 4: 
                 lib.color_wish = lib.COLORS[index]
         elif block_size*2 + col_pos*3 <= y <= block_size*3 + col_pos*3: 
-            index = 3 + (x - col_pos + block_size) // block_size
-            index = int(index) if 5.0 <= index <= 10.0 else -99
-            if 5 <= index <= 10: 
+            index = 3 + (x - col_pos + block_size - block_size/2) // block_size
+            index = int(index) if 5.0 <= index <= 9.0 else -99
+            if 5 <= index <= 9: 
                 lib.color_wish = lib.COLORS[index]
+        ## 6 color with light purple 
+        # elif block_size*2 + col_pos*3 <= y <= block_size*3 + col_pos*3: 
+        #     index = 3 + (x - col_pos + block_size) // block_size
+        #     index = int(index) if 5.0 <= index <= 10.0 else -99
+        #     if 5 <= index <= 10: 
+        #         lib.color_wish = lib.COLORS[index]
     

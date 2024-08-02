@@ -28,6 +28,10 @@ class Game:
         if self.turtle_left == 0: 
             triples, pairs = self.check_duplicates()
             if triples == [] and pairs == []: 
+                for row in range(ROWS): 
+                    for col in range(COLS): 
+                        if self.board[row][col] != None: 
+                            lib.score += 1
                 lib.scene_manager = "END"
                 lib.screen.fill(lib.BLACK)
             else: 
@@ -64,8 +68,13 @@ class Game:
         self.update_board() 
         self.update_screen()
         if self.check_full(): 
-            lib.wait(check_interval)
-            self.check_board(check_interval)  
+            triples, pairs = self.check_duplicates()
+            if triples == [] and pairs == []: 
+                lib.scene_manager = "END"
+                lib.screen.fill(lib.BLACK)
+            else: 
+                lib.wait(lib.check_interval)
+                self.check_board(lib.check_interval) 
 
     def check_full(self): 
         for row in range(ROWS):
@@ -91,23 +100,23 @@ class Game:
         included_coords = set()
 
         # triples 
-        if self.board[0][0] == self.board[1][1] == self.board[2][2]: 
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] and self.board[0][0] != None: 
             included_coords.add((0, 0))
             included_coords.add((1, 1))
             included_coords.add((2, 2))
             triples.append(((0, 0), (1, 1), (2, 2)))
-        if self.board[0][2] == self.board[1][1] == self.board[2][0]: 
+        if self.board[0][2] == self.board[1][1] == self.board[2][0] and self.board[0][2] != None: 
             included_coords.add((0, 2))
             included_coords.add((1, 1))
             included_coords.add((2, 0))
             triples.append(((0, 2), (1, 1), (2, 0)))
         for i in range(ROWS): 
-            if self.board[i][0] == self.board[i][1] == self.board[i][2]: 
+            if self.board[i][0] == self.board[i][1] == self.board[i][2] and self.board[i][0] != None: 
                 included_coords.add((i, 0))
                 included_coords.add((i, 1))
                 included_coords.add((i, 2))
                 triples.append(((i, 0), (i, 1), (i, 2)))
-            if self.board[0][i] == self.board[1][i] == self.board[2][i]: 
+            if self.board[0][i] == self.board[1][i] == self.board[2][i] and self.board[0][i] != None: 
                 included_coords.add((0, i))
                 included_coords.add((1, i))
                 included_coords.add((2, i))
@@ -152,7 +161,7 @@ class Game:
         while pairs: 
             for r, c in pairs[0]: 
                 self.board[r][c] = None
-            lib.score += 1 
+            lib.score += 2 
             self.turtle_left += 1 
             self.update_board()
             self.update_screen()
@@ -178,7 +187,7 @@ class Game:
 
     # display score board  
     def update_screen(self): 
-        col_pos = 490 
+        col_pos = 500 
 
         font_l = pygame.font.SysFont('sfnsmono', 18) 
         text_title = font_l.render("Score Board", True, lib.WHITE)

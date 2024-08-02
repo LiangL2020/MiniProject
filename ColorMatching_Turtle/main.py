@@ -13,7 +13,7 @@ from scene_end import End
 
 # TODO: 
 #  1. hidden color (隐藏色) 
-#  2. make color blocks turtles (or something else)
+#  2. make color blocks ==> turtles (or something else)
 #  3. for full board no duplicates, free turtle to check for duplicates
 #  4. if color_wish make "ding~" when adding turtle (button click) 
 #  5. end game if out of turtles [CHECK]
@@ -22,6 +22,7 @@ from scene_end import End
 #  8. running out of turtles check duplicates again first... [CHECK]
 #  9. game restart, board should be cleared [CHECK]
 # 10. make scenes different classes for organization [CHECK]
+# 11. sort out score and turtles (adding score be like how much turtles you get)
 
 if __name__ == "__main__": 
     running = True 
