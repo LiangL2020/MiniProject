@@ -23,6 +23,8 @@ from scene_end import End
 #  9. game restart, board should be cleared [CHECK]
 # 10. make scenes different classes for organization [CHECK]
 # 11. sort out score and turtles (adding score be like how much turtles you get) [CHECK]
+# 12. add additional board 
+# 13. add scroll bar or something for starting turtles 
 
 if __name__ == "__main__": 
     running = True 
