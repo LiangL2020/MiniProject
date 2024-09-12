@@ -1,10 +1,12 @@
 import pygame 
 import lib 
 from button import Button 
+from scroll_bar import ScrollBar
 
 class Menu: 
     def __init__(self): 
         self.start_game = Button(550, 150, 100, 40, lib.WHITE, lib.GRAY, 15, "START", lib.BLACK, self.button_start)
+        self.turtle_bar = ScrollBar(150, 130, 250, 10, lib.WHITE, 50, lib.GRAY)
         self.reset = False 
 
     def button_start(self): 
@@ -60,10 +62,13 @@ class Menu:
 
     def display_turtle_selection(self): 
         font_s = pygame.font.SysFont('sfnsmono', 16) 
-        text_wish = font_s.render("Num Turtles: ", True, lib.WHITE)
+        text_wish = font_s.render("Num Turtles: " + str(lib.num_turtle), True, lib.WHITE)
         text_rect_wish = text_wish.get_rect() 
         text_rect_wish.center = (200, 100)
         lib.screen.blit(text_wish, text_rect_wish)
-        pygame.draw.rect(lib.screen, lib.WHITE, (150, 130, 250, 10))
+        self.turtle_bar.draw(lib.screen)
+        # pygame.draw.rect(lib.screen, lib.WHITE, (150, 130, 250, 10))
+
+
 
     

@@ -10,6 +10,7 @@ COLORS = [(198, 138, 138), (150, 84, 84), (198, 149, 117), (188, 165, 117), (217
 
 score = 0
 check_interval = 500  # ms
+num_turtle = 15 
 color_wish = BLACK
 scene_manager = "MENU" 
 

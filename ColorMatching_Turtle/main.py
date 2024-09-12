@@ -31,7 +31,7 @@ if __name__ == "__main__":
     lib.screen.fill(lib.BLACK)
 
     menu = Menu()
-    game = Game(15)
+    game = Game()
     end = End() 
 
     while running: 
@@ -43,6 +43,7 @@ if __name__ == "__main__":
                 if lib.scene_manager == "MENU": 
                     menu.handle_color_wish(x, y, 75)
             menu.start_game.check_click(event)
+            menu.turtle_bar.check_click(event)
             game.add_tur.check_click(event)
             game.back_menu.check_click(event)
             game.star_over.check_click(event)

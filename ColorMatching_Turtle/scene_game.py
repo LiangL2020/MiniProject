@@ -8,10 +8,10 @@ ROWS, COLS = 3, 3
 SQUARE_SIZE = lib.WIDTH // (COLS+2) 
 
 class Game: 
-    def __init__(self, turtle_left): 
+    def __init__(self): 
         lib.score = 0
-        self.num_turtle = turtle_left
-        self.turtle_left = turtle_left 
+        self.num_turtle = lib.num_turtle
+        self.turtle_left = lib.num_turtle 
         self.board = [[None for _ in range(COLS)] for _ in range(ROWS)] 
         self.add_tur = Button(600, 100, 100, 50, lib.WHITE, lib.GRAY, 15, 'add turtle', lib.BLACK, self.button_turtle)
         self.back_menu = Button(35, 550, 50, 25, lib.WHITE, lib.GRAY, 8, "Back", lib.BLACK, self.back_menu) 
